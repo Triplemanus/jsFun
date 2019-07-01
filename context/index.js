@@ -16,11 +16,11 @@ const context = {
 
 
     // What is the value of `this` when we call ship.fly()?
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = 'global window object';
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // When we call ship.fly(), 
   },
 
   exerciseB() {
