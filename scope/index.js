@@ -29,11 +29,23 @@ const scope = {
 
     // Log D: personC
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = [
+      { 'A': 'Ben'},
+      { 'B': 'CardiB'},
+      { 'C': 'CardiB'},
+      { 'D': 'Paul'}
+    ];
+    
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // We start by declaring 3 variables, PersonA, B and C, and assigning them
+    // each a value. We then skip over the function definition until we reach 
+    //the function call. WE go into the function, evaluate the if condition, 
+    //which is true, so we go into the if block where person is declared without
+    //a type assigned so it becomes a global variable and assigned a value.
+    // Next, we call the beautifyPerson function, which doesn't error because 
+    //the function definition was identified during teh creation phase.
   },
 
   exerciseB() {
@@ -63,7 +75,12 @@ const scope = {
 
     // Log D: number
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = [
+      { 'A': 'Ben'},
+      { 'B': 'CardiB'},
+      { 'C': 'CardiB'},
+      { 'D': 'Paul'}
+    ];
     return result;
 
     // Annotation:

@@ -24,22 +24,28 @@ const kittyPrompts = {
     
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+  
+   
+    const result = kitties.filter(kitty => (kitty.color === 'orange')).map(kitten => kitten.name);
+      return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //I tried to do this with one prototype but I kept getting stuck trying
+    //to test with color but return name, so I decided to split the tasks
+    //into two different prototypes to get the result I needed.
   },
 
   sortByAge() {
     // Sort the kitties by their age
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.sort((a, b) => b.age - a.age);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
-  },
+    // Hah! First it errored out when I "knew" it was right but then
+    // I realized you wanted age highest to lowest and I was sorting them 
+    // lowest to highest. Solution, just flip the variables!
+    },
 
   growUp() {
     // Return an array of kitties who have all grown up by 2 years e.g.
@@ -54,9 +60,12 @@ const kittyPrompts = {
     //   color: 'orange'
     // },
     // ...etc]
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    const aged = [];
+    kitties.forEach(kitty => {
+      kitty.age += 2;
+      aged.push(kitty);
+    });      
+    return aged;
   }
 };
 
@@ -87,7 +96,18 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+     var countedNames = clubs.reduce(function (allNames, name) { 
+      if (name in allNames) {
+        allNames[name]++;
+      }
+      else {
+        allNames[name] = 1;
+      }
+      return allNames;
+    }, {});
+
+    const result =
+
     return result;
 
     // Annotation:
