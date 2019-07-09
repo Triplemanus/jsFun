@@ -108,7 +108,7 @@ const clubPrompts = {
 
     const result =
 
-    return result;
+    r//eturn result;
 
     // Annotation:
     // Write your annotation here as a comment
