@@ -96,7 +96,18 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+     var countedNames = clubs.reduce(function (allNames, name) { 
+      if (name in allNames) {
+        allNames[name]++;
+      }
+      else {
+        allNames[name] = 1;
+      }
+      return allNames;
+    }, {});
+
+    const result =
+
     return result;
 
     // Annotation:

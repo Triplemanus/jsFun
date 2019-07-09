@@ -1,15 +1,15 @@
-const chai = require("chai");
+const chai = require('chai');
 const expect = chai.expect;
-const scope = require("../scope/index");
+const scope = require('../scope/index');
 
 chai.use(function(e, t) {
-  e.Assertion.addMethod("withMessage", function(e) {
-    t.flag(this, "message", e)
+  e.Assertion.addMethod('withMessage', function(e) {
+    t.flag(this, 'message', e)
   })
 })
 
-describe("SCOPE", () => {
-  it("exerciseA", () => {
+describe('SCOPE', () => {
+  it('exerciseA', () => {
     const e = JSON.stringify(scope.exerciseA()) == JSON.stringify([{
       A: "Ben"
     }, {
