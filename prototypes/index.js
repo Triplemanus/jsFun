@@ -96,19 +96,29 @@ const clubPrompts = {
     //   ...etc
     // }
 
-     var countedNames = clubs.reduce(function (allNames, name) { 
-      if (name in allNames) {
-        allNames[name]++;
-      }
-      else {
-        allNames[name] = 1;
-      }
-      return allNames;
-    }, {});
+    //newObj = { 'name': Louisa,  clubs: ['Drama', 'Art]}
+    let mapCountedNames = clubs.map(club => club.members);
 
-    const result =
+    function flattenThis(mapNames) {
+      return [].concat(...mapNames)
+    }
+    
+    let flatten = [...new Set(flattenThis(mapCountedNames))]
+    console.log(flatten)
 
-    r//eturn result;
+    //  var countedNames = clubs.reduce(function (allNames, name) { 
+    //   if (name in allNames) {
+    //     allNames[name]++;
+    //   }
+    //   else {
+    //     allNames[name] = 1;
+    //   }
+    //   return allNames;
+    // }, {});
+
+    const result = 1;
+
+    //return result;
 
     // Annotation:
     // Write your annotation here as a comment
@@ -143,7 +153,13 @@ const modPrompts = {
     //   { mod: 4, studentsPerInstructor: 8 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = mods.map(obj => {
+      let rObj = {};
+      rObj.mod = Object.values(obj)[0];
+      rObj.studentsPerInstructor = (Object.values(obj)[1]/Object.values(obj)[2]);
+      return rObj;
+    });
+      
     return result;
 
     // Annotation:
@@ -178,11 +194,18 @@ const cakePrompts = {
     //    ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.map(cake => {
+      let rObj = {};
+      rObj.flavor = cake.cakeFlavor;
+      rObj.inStock = Object.values(cake)[4];
+      return rObj;
+    })
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // This exercise is just about looping through the cakes array and pulling
+    // out the fields you need. I just wanted to try two different methods to 
+    // access the fields data inside the cakes array.
   },
 
   onlyInStock() {
@@ -206,7 +229,9 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.filter(cake => {
+      return cake.inStock > 0;
+    })
     return result;
 
     // Annotation:
@@ -217,7 +242,10 @@ const cakePrompts = {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((totalStock, cake) => {
+      totalStock += cake.inStock;
+      return totalStock;
+    },0);
     return result;
 
     // Annotation:
@@ -228,12 +256,16 @@ const cakePrompts = {
     // Return an array of all unique toppings (no duplicates) needed to bake
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    // let allToppings = cakes.reduce((toppings, cake) => {
+    //   return toppings.concat(cake.toppings);
+    // },[]);
+    const result = [...new Set(cakes.reduce((toppings, cake) => {
+      return toppings.concat(cake.toppings);
+    },[]))];
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Loving this new Set object (well, new to me anyway) and the 
   },
 
   groceryList() {
@@ -246,8 +278,38 @@ const cakePrompts = {
     //    'berries': 2, 
     //    ...etc
     // }
+    let gList = {
+      'toppings' : '',
+      'count' : 0
+    };
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    // const result = cakes.map(cake => { 
+    //   console.log(cake.toppings);
+    //   // if(!Object.keys(gList).includes(cake.toppings)) {
+    //   //   console.log(Object.keys(gList));
+    //   //   gList.toppings = cake.toppings;
+    //   //   gList.count = cake.count;
+    //   // } else {
+    //   //   gList.count += cake.count;
+    //   // }
+    //   // return gList;
+    // });
+    // let uniqueTop = [...new Set(cakes.reduce((toppings, cake) => {
+    //   return toppings.concat(cake.toppings);
+    // },[]))];
+    // const result = cakes.reduce((gList, cake)=> {
+    //   return gList.toppings = cake.toppings.flat();
+    // }, {});
+    const allToppings = cakes.reduce((toppings, cake) => {
+      cake.toppings.forEach((topping) => {
+        if(!toppings.includes(topping)) {
+          toppings.push({topping, 'count': 0});
+        }
+      });
+      return toppings;
+    }, []);
+    const result = allToppings;
+    console.log(allToppings);
     return result;
 
     // Annotation:
@@ -282,11 +344,11 @@ const classPrompts = {
     //   { roomLetter: 'G', program: 'FE', capacity: 29 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.filter(classroom => classroom.program === 'FE');
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Pretty simple example here of a classic use for filter() prototype.
   },
 
   totalCapacities() {
