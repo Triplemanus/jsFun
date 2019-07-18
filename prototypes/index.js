@@ -278,38 +278,18 @@ const cakePrompts = {
     //    'berries': 2, 
     //    ...etc
     // }
-    let gList = {
-      'toppings' : '',
-      'count' : 0
-    };
+  
+    let toppings = [];
 
-    // const result = cakes.map(cake => { 
-    //   console.log(cake.toppings);
-    //   // if(!Object.keys(gList).includes(cake.toppings)) {
-    //   //   console.log(Object.keys(gList));
-    //   //   gList.toppings = cake.toppings;
-    //   //   gList.count = cake.count;
-    //   // } else {
-    //   //   gList.count += cake.count;
-    //   // }
-    //   // return gList;
-    // });
-    // let uniqueTop = [...new Set(cakes.reduce((toppings, cake) => {
-    //   return toppings.concat(cake.toppings);
-    // },[]))];
-    // const result = cakes.reduce((gList, cake)=> {
-    //   return gList.toppings = cake.toppings.flat();
-    // }, {});
-    const allToppings = cakes.reduce((toppings, cake) => {
-      cake.toppings.forEach((topping) => {
-        if(!toppings.includes(topping)) {
-          toppings.push({topping, 'count': 0});
-        }
-      });
-      return toppings;
-    }, []);
-    const result = allToppings;
-    console.log(allToppings);
+    cakes.forEach(cake => {
+      toppings = toppings.concat(cake.toppings);
+    });
+    
+    result = toppings.reduce((groceryList, topping) => {
+          (Object.keys(groceryList).includes(topping) ? groceryList[topping]++ : groceryList[topping] = 1);
+        return groceryList;
+      }, {});
+
     return result;
 
     // Annotation:
@@ -359,21 +339,30 @@ const classPrompts = {
     //   beCapacity: 96
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.reduce(function (capacity, students) { 
+      if (students.program === 'FE') {
+        capacity.feCapacity += students.capacity;
+      } else {
+        capacity.beCapacity += students.capacity;
+      }
+      return capacity;
+    }, {'feCapacity': 0,
+        'beCapacity': 0});
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Not bad. First time I've used actual values inside an object or array
+    // as teh initial value for reduce. Not sure it would work but alwayus suspected it would, and surprise!, it did, on first attempt even.
   },
 
   sortByCapacity() {
     // Return the array of classrooms sorted by their capacity (least capacity to greatest)
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.sort((a,b) => (a.capacity - b.capacity));
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Simple example of the power of sort()
   }
 };
 
@@ -397,13 +386,19 @@ const classPrompts = {
 const breweryPrompts = {
   getBeerCount() {
     // Return the total beer count of all beers for every brewery e.g.
-    // 40
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    // 40 
+    let totalBeers = 0;
+    const result = breweries.forEach(brewhaha => {
+      brewhaha.beers.forEach(beerName => {
+        totalBeers++;
+        })
+      });      
+    
+      return totalBeers;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //Took a little longer than I thought but it came down to getting to the 
+    // right level of object/array to get the proper count.
   },
 
   getBreweryBeerCount() {
@@ -415,11 +410,15 @@ const breweryPrompts = {
     // ...etc.
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.map(brewPlace => {
+      return  { 'beerCount': brewPlace.beers.length, 'name': brewPlace.name,};
+    });
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Tried reduce first and just couldn't get the output I wanted. Changed to
+    // map and got what I wanted but it still didn't pass. Then I realized the 
+    // example answer is backwards!
   },
 
   findHighestAbvBeer() {
@@ -427,11 +426,22 @@ const breweryPrompts = {
     // e.g.
     // { name: 'Barrel Aged Nature\'s Sweater', type: 'Barley Wine', abv: 10.9, ibu: 40 }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((champion, contender) => {
+      //console.log(Object.keys(contender.beers))
+      if(!champion.abv) champion.abv = 0;
+       contender.beers.forEach (beer => {
+         if (beer.abv > champion.abv) champion = beer;
+       })
+        return champion;
+    },{});
+    
+    // })
+    // })
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // It's not that I'm trying to be clever but it seems I always default to
+    // the most difficult method to solve a problem.
   }
 };
 
@@ -475,7 +485,18 @@ const turingPrompts = {
     //  { name: 'Robbie', studentCount: 18 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = instructors.reduce((instructorMod, instructor) => {
+      console.log(instructor)
+      console.log(instructor.name)
+       instructorMod +=  { 'name': instructor.name, 'studentCount': cohorts.find(student => {
+        (student.module === instructor.module)}),};
+       // instructorMod[name] = instructor.name;
+      //   instructorMod[studentCount] = cohorts.find(student => {
+      //   (student.module === instructor.module)})
+         console.log(`instructorMod is: ${instructorMod}`)
+       return instructorMod;
+    }, []);
+    
     return result;
 
     // Annotation:
@@ -605,8 +626,16 @@ const astronomyPrompts = {
     //     color: 'red' }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let returnStars = [];
+    stars.filter(star => {
+      let constKeys = Object.keys(constellations);
+      constKeys.forEach(key => {
+       if(constellations[key].stars.includes(star.name)) {
+         returnStars.push(star);
+       }
+      })
+    })
+    return returnStars;
 
     // Annotation:
     // Write your annotation here as a comment
