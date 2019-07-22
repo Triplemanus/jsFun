@@ -11,7 +11,11 @@ const instructors = [
 ];
 
 const cohorts = [
-  { cohort: 1806, module: 1, studentCount: 30, curriculum: ['html', 'css', 'javascript'] },
+  { cohort: 1806, 
+    module: 1, 
+    studentCount: 30, 
+    curriculum: ['html', 'css', 'javascript'] 
+  },
   { cohort: 1804, module: 2, studentCount: 21, curriculum: ['javascript', 'css', 'recursion', 'scope', 'oop'] },
   { cohort: 1803, module: 3, studentCount: 20, curriculum: ['react', 'redux', 'html', 'javascript'] },
   { cohort: 1801, module: 4, studentCount: 18, curriculum: ['pwas', 'mobile', 'node', 'javascript', 'css'] }

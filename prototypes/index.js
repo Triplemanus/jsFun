@@ -484,17 +484,16 @@ const turingPrompts = {
     //  { name: 'Pam', studentCount: 21 },
     //  { name: 'Robbie', studentCount: 18 }
     // ]
+   
+
+    
 
     const result = instructors.reduce((instructorMod, instructor) => {
-      console.log(instructor)
-      console.log(instructor.name)
-       instructorMod +=  { 'name': instructor.name, 'studentCount': cohorts.find(student => {
-        (student.module === instructor.module)}),};
-       // instructorMod[name] = instructor.name;
-      //   instructorMod[studentCount] = cohorts.find(student => {
-      //   (student.module === instructor.module)})
-         console.log(`instructorMod is: ${instructorMod}`)
-       return instructorMod;
+      let count = cohorts.find(student => {
+        return (student.module === instructor.module);
+        })
+        instructorMod.push( { 'name': instructor.name, 'studentCount': count.studentCount});
+        return instructorMod;
     }, []);
     
     return result;
@@ -510,7 +509,19 @@ const turingPrompts = {
     // cohort1804: 10.5
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    let newMap = cohorts.map(obj => {
+      let teachers = [];
+      instructors.forEach(classRoom => {
+        if (classRoom.module === obj.module) teachers.push(classRoom.module);
+      });
+      return  ([obj.cohort, obj.studentCount/teachers.length, ])
+    });
+
+    let result = newMap.reduce((studentCohort, cohort) => {    
+      studentCohort['cohort' + cohort[0]] = cohort[1];
+      return studentCohort;
+    }, {});
+
     return result;
 
     // Annotation:
