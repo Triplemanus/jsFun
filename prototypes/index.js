@@ -543,7 +543,22 @@ const turingPrompts = {
     //     Will: [1, 2, 3, 4]
     //   }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+
+
+    const teachable = instructors.map(data => {
+      let canTeach = [];
+      data.teaches.forEach(skill => {
+        cohorts.forEach(thing => {
+          if (thing.curriculum.includes(skill) ) canTeach.push(thing.module)
+        })
+      })
+      return [data.name, canTeach.sort((a,b) => a-b)];
+    })
+    let result = teachable.reduce((teachersClasses, skills) => {
+      teachersClasses[skills[0]] = [...new Set(skills[1])] 
+      return teachersClasses;
+    }, {});
+    console.log(result);
     return result;
 
     // Annotation:
@@ -559,12 +574,27 @@ const turingPrompts = {
     //   javascript: [ 'Travis', 'Louisa', 'Christie', 'Will' ],
     //   recursion: [ 'Pam', 'Leta' ]
     // }
+    let mapCurr = [];
+     cohorts.forEach(curr => {
+      curr.curriculum.forEach(topic => {
+        if (!mapCurr.includes(topic)) mapCurr.push(topic);
+      });
+    });
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = mapCurr.reduce((currTeachers, curriculum) => {
+      let curInstructors = [];
+      instructors.forEach(instructor => {
+        if (instructor.teaches.includes(curriculum)) curInstructors.push(instructor.name)
+      })
+      currTeachers[curriculum] = curInstructors;
+      return currTeachers;
+    }, {});
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Noticing a pattern here with two datasets. While part of me is pleased
+    // that I'm getting the correct output, the perfectionsist part is looking
+    // at this code and thinking "there's got to be better/shorter way."
   }
 };
 
