@@ -514,7 +514,7 @@ const turingPrompts = {
       instructors.forEach(classRoom => {
         if (classRoom.module === obj.module) teachers.push(classRoom.module);
       });
-      return  ([obj.cohort, obj.studentCount/teachers.length, ])
+      return  ([obj.cohort, obj.studentCount/teachers.length ])
     });
 
     let result = newMap.reduce((studentCohort, cohort) => {    
@@ -624,8 +624,23 @@ const bossPrompts = {
     //   { bossName: 'Ursula', sidekickLoyalty: 20 },
     //   { bossName: 'Scar', sidekickLoyalty: 16 }
     // ]
+   // console.log(Object.values(bosses));
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    let bossKick = Object.keys(bosses);
+    let result = [];
+    bossKick.forEach(boss => {
+      let loyalSumm = 0;
+        sidekicks.forEach(obj => {
+          if(obj.boss === bosses[boss].name) {
+            loyalSumm += obj.loyaltyToBoss;
+          }
+        });
+        result.push({
+          'bossName': boss.charAt(0).toUpperCase() + boss.slice(1),
+          'sidekickLoyalty': loyalSumm
+        })
+    });
+
     return result;
 
     // Annotation:
@@ -671,9 +686,9 @@ const astronomyPrompts = {
     stars.filter(star => {
       let constKeys = Object.keys(constellations);
       constKeys.forEach(key => {
-       if(constellations[key].stars.includes(star.name)) {
-         returnStars.push(star);
-       }
+        if(constellations[key].stars.includes(star.name)) {
+          returnStars.push(star);
+        }
       })
     })
     return returnStars;
@@ -692,8 +707,13 @@ const astronomyPrompts = {
     //   orange: [{obj}],
     //   red: [{obj}]
     // }
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const starColors = [...new Set(stars.map(star => star.color))];
+    let result = {};
+      starColors.forEach(color => {
+        const matchingColorStars = stars.filter(star => star.color === color);
+        result[color] = matchingColorStars;
+      })
+      
     return result;
 
     // Annotation:
@@ -715,7 +735,8 @@ const astronomyPrompts = {
     //    "The Little Dipper" ]
 
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = stars.map(star => star.constellation).filter(spaces => spaces != '')
+
     return result;
 
     // Annotation:
@@ -861,8 +882,22 @@ const dinosaurPrompts = {
       }]
     */
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+
+    // const resultPrelim = Object.keys(humans).reduce((uncastActors, actor) => {
+    //     movies.forEach(movie => {
+    //       if (!movie.cast.includes(actor)) {
+    //         uncastActors.push({
+    //           name: actor,
+    //           nationality: humans[actor].nationality,
+    //           imdbStarMeterRating: humans[actor].imdbStarMeterRating
+    //         });
+    //       }
+    //     })
+    //     return uncastActors;
+    //   }, []).sort((a,b) => (a.nationality - b.nationality));
+
+    // result = [...new Set(resultPrelim)];
+    // return result;
 
     // Annotation:
     // Write your annotation here as a comment
