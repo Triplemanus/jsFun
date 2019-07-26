@@ -76,7 +76,8 @@ const context = {
     return result;
 
     // Annotation: 
-    // Write your annotation here as a comment
+    // So ES5 function () is assigned at execution time so when it is called 
+    // with dog.getBreed, it gets assigned the global window objrct.
   },
 
   exerciseE() {
@@ -88,7 +89,7 @@ const context = {
 
 
     // What is the value of `this` when we call fn()?
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = 'global window object';
     return result;
 
     // Annotation: 
@@ -111,11 +112,12 @@ const context = {
     const storm = new Hero('Ororo', 'weather control', true);
 
     // What is the value of `this` when we call storm.identifyHero()?
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = 'instance of Hero';
     return result;
 
     // Annotation: 
-    // Write your annotation here as a comment
+    // I beleive class methods are an ES6 construct so I'm going with ... 
+    // at creation time when we use the NEW keyword.
   },
 
   exerciseG() {
@@ -139,11 +141,14 @@ const context = {
 
 
     // What is the value of `this` when we call monopoly.restart()?
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = 'global window object';
     return result;
 
     // Annotation: 
-    // Write your annotation here as a comment
+    // setTimeout is set up as an ES5 function so this will be set during
+    // execution, giving it a value of gwo, not what I expected when I first 
+    // looked at this, seeing the NEW keyword I expected it to be an instance
+    // of Game.
   },
 
   exerciseH() {
@@ -159,7 +164,7 @@ const context = {
     obj.method();
 
     // What is the value of `this` when we call obj.arrowFunction()?
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = 'Game';
     return result;
 
     // Annotation: 
@@ -182,11 +187,13 @@ const context = {
     }, poets);
 
     // What is the value of `this` that gets returned on each iteration of poets.map()?
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = 'poets';
     return result;
 
     // Annotation: 
     // Write your annotation here as a comment. Annotation should include explanation regarding the second argument of `poets` that is being passed
+    // Of course my first response w/b global window but then after looking
+    // up the second poets it acts like bind() to me, so this becomes poets.
   },
 
   exerciseJ() {
@@ -255,7 +262,7 @@ const context = {
     }
 
     // What is the value of `this` when we call makeBirdNoise.call(robert);
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = 'robert';
     return result;
 
     // Annotation: 
@@ -297,7 +304,7 @@ const context = {
     });
 
     // What is the value of `this` when a user clicks on our button element and the callback is triggered?
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = 'instance of document';
     return result;
 
     // Annotation: 
@@ -312,12 +319,13 @@ const context = {
       }
     }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = 'global window object';
     return result;
 
     // What is the value of `this` when we call child.scream();
     // Annotation: 
-    // Write your annotation here as a comment
+    // As an ES6 arrow function defined within an object lteral of global scope,
+    // this will also have the global scope so global windowobject is the value.
   }
 };
 
