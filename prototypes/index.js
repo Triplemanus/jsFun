@@ -809,14 +809,26 @@ const ultimaPrompts = {
 
     
     const result = characters.map(character => {
-      console.log('character is ', character.name);
-      
-      //return something;
+        return character.weapons.reduce((acc, charWeapon) => {
+          acc[character.name] = Object.keys(weapons).reduce((totalDamage, weapon) => {
+            if(character.weapons.includes(weapon)) {
+              totalDamage.damage += weapons[weapon].damage;
+              totalDamage.range += weapons[weapon].range;
+            }
+            return totalDamage;
+          }, {"damage": 0,
+              "range": 0});
+          return acc;
+        },{});
     });
+    console.log('totalDamage is ', result)
     return result;
 
     // Annotation:
-    // Have an array of objects, need and array of objects, so map()?
+    // Have an array of objects, need and array of objects, so map()? With
+    // a reduce?
+    // OK, so the key was a second reduce, nested inside the first reduce to 
+    // get the damage and range to sum.  
   },
 };
 
@@ -849,11 +861,19 @@ const dinosaurPrompts = {
     //   'Jurassic World: Fallen Kingdom': 18
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = movies.reduce((movieTitles, movie) => {
+      movieTitles[movie.title] = (movie.dinos.filter (dino => {
+        if(dinosaurs[dino].isAwesome) return dino;
+      })).length;
+      return movieTitles;
+    }, {})
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Not the most difficult because we're only asking for data from 2
+    // data sources but still a bit of a challenge. Finished this in 23 minutes
+    // having not looked at the dataset before. Why do I only get 1 phase plus
+    // a little more finished in assessment?
   },
 
   averageAgePerMovie() {
@@ -882,11 +902,28 @@ const dinosaurPrompts = {
       }
     */
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = movies.reduce((directorMovies, movie) => {
+      let ages = movie.cast.reduce((castAges, castMember) => {
+        castAges += Object.keys(humans).reduce((humanAges, human) => {
+          if (human === castMember) {
+            humanAges += (movie.yearReleased - humans[human].yearBorn);
+          }
+          return humanAges;
+        }, 0)/movie.cast.length;
+        return castAges;
+      }, 0);
+      if (!directorMovies[movie.director]){
+        directorMovies[movie.director] = { [movie.title]: Math.floor(ages)};
+      } else {
+        directorMovies[movie.director][movie.title] =  Math.floor(ages);
+      }
+      return directorMovies;
+    },{});
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Given 3 datasets, need to return an object, sounds like a complicated
+    // reduce to me. But where to start?
   },
 
   uncastActors() {
@@ -915,25 +952,28 @@ const dinosaurPrompts = {
       }]
     */
 
-
-    // const resultPrelim = Object.keys(humans).reduce((uncastActors, actor) => {
-    //     movies.forEach(movie => {
-    //       if (!movie.cast.includes(actor)) {
-    //         uncastActors.push({
-    //           name: actor,
-    //           nationality: humans[actor].nationality,
-    //           imdbStarMeterRating: humans[actor].imdbStarMeterRating
-    //         });
-    //       }
-    //     })
-    //     return uncastActors;
-    //   }, []).sort((a,b) => (a.nationality - b.nationality));
-
-    // result = [...new Set(resultPrelim)];
-    // return result;
-
+   let notCasted = [];
+      const result = Object.keys(humans).reduce((notInMovies, human) => {     
+        !movies.find(movie => movie.cast.includes(human)) ? notCasted.push(human) : null;
+          if (!movies.find(movie => movie.cast.includes(human))) {
+            notInMovies.push( { name: `${human}`,  imdbStarMeterRating: parseInt(`${humans[human].imdbStarMeterRating}`), nationality: `${humans[human].nationality}`});
+            }
+        return notInMovies;
+      }, []).sort(function(a, b) {
+        let nameA = a.nationality.toUpperCase(); 
+        let nameB = b.nationality.toUpperCase(); 
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+ 
+      return result;
     // Annotation:
-    // Write your annotation here as a comment
+    // Probably could use some refactoring here but time is the real enemy.
   },
 
   actorsAgesInMovies() {
