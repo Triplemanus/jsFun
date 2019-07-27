@@ -279,26 +279,38 @@ const cakePrompts = {
     //    ...etc
     // }
   
-    let toppings = [];
+    // let toppings = [];
 
-    cakes.forEach(cake => {
-      toppings = toppings.concat(cake.toppings);
-    });
+    // cakes.forEach(cake => {
+    //   toppings = toppings.concat(cake.toppings);
+    // });
     
-    result = toppings.reduce((groceryList, topping) => {
-          (Object.keys(groceryList).includes(topping) ? groceryList[topping]++ : groceryList[topping] = 1);
-        return groceryList;
-      }, {});
+    // result = toppings.reduce((groceryList, topping) => {
+    //       (Object.keys(groceryList).includes(topping) ? groceryList[topping]++ : groceryList[topping] = 1);
+    //     return groceryList;
+    //   }, {});
 
-    return result;
+    // or 
+
+    gList = cakes.reduce((acc, cake) => {
+      cake.toppings.forEach(topping => {
+        if(!acc[topping]) {
+          acc[topping] = 1;
+        } else {
+          acc[topping]++
+        }
+      })
+      return acc
+    }, {});
+
+    return gList;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Thought there was a simpler way to do this when I was working on it,  
+    // but it just didn't come to me so I went with what works first.
+    // Obviously, the second attempt was simpler and easier to read.
   }
 };
-
-
-
 
 
 
@@ -346,13 +358,15 @@ const classPrompts = {
         capacity.beCapacity += students.capacity;
       }
       return capacity;
-    }, {'feCapacity': 0,
-        'beCapacity': 0});
+    }, {'feCapacity': 0,  //When you know for sure the form of your 
+        'beCapacity': 0}); //return object, good time to define
+                          //your object as initial value
+        console.log('feCapacity is ', result);
     return result;
 
     // Annotation:
     // Not bad. First time I've used actual values inside an object or array
-    // as teh initial value for reduce. Not sure it would work but alwayus suspected it would, and surprise!, it did, on first attempt even.
+    // as the initial value for reduce. Not sure it would work but always suspected it would, and surprise!, it did, on first attempt even.
   },
 
   sortByCapacity() {
@@ -523,6 +537,11 @@ const turingPrompts = {
     }, {});
 
     return result;
+
+    //cohorts.reduce((acc, chort) => {
+    //object literal for key, instructors.filter()/length for 
+    //number
+   // })
 
     // Annotation:
     // Write your annotation here as a comment
@@ -740,7 +759,9 @@ const astronomyPrompts = {
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Not sure I understand the objective here.  Got the array with the
+    // correct elements in it but one is out iof order from the expected 
+    //result.
   }
 };
 
@@ -766,8 +787,15 @@ const ultimaPrompts = {
 
     // Return the sum of the amount of damage for all the weapons that our characters can use
     // Answer => 113
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const allWeapons = [...new Set(characters.map(weapon => weapon.weapons))];
+    let totalDamage = 0;
+    allWeapons.forEach(eachWeapon => {
+      eachWeapon.forEach(weapon => {
+        totalDamage += parseInt(weapons[weapon].damage);
+      })
+    })
+   
+    const result = totalDamage;
     return result;
 
     // Annotation:
@@ -779,11 +807,28 @@ const ultimaPrompts = {
     // Return the sum damage and total range for each character as an object. 
     // ex: [ { Avatar: { damage: 27, range: 24 }, { Iolo: {...}, ...}
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    
+    const result = characters.map(character => {
+        return character.weapons.reduce((acc, charWeapon) => {
+          acc[character.name] = Object.keys(weapons).reduce((totalDamage, weapon) => {
+            if(character.weapons.includes(weapon)) {
+              totalDamage.damage += weapons[weapon].damage;
+              totalDamage.range += weapons[weapon].range;
+            }
+            return totalDamage;
+          }, {"damage": 0,
+              "range": 0});
+          return acc;
+        },{});
+    });
+    console.log('totalDamage is ', result)
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Have an array of objects, need and array of objects, so map()? With
+    // a reduce?
+    // OK, so the key was a second reduce, nested inside the first reduce to 
+    // get the damage and range to sum.  
   },
 };
 
@@ -816,11 +861,19 @@ const dinosaurPrompts = {
     //   'Jurassic World: Fallen Kingdom': 18
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = movies.reduce((movieTitles, movie) => {
+      movieTitles[movie.title] = (movie.dinos.filter (dino => {
+        if(dinosaurs[dino].isAwesome) return dino;
+      })).length;
+      return movieTitles;
+    }, {})
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Not the most difficult because we're only asking for data from 2
+    // data sources but still a bit of a challenge. Finished this in 23 minutes
+    // having not looked at the dataset before. Why do I only get 1 phase plus
+    // a little more finished in assessment?
   },
 
   averageAgePerMovie() {
@@ -849,11 +902,28 @@ const dinosaurPrompts = {
       }
     */
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = movies.reduce((directorMovies, movie) => {
+      let ages = movie.cast.reduce((castAges, castMember) => {
+        castAges += Object.keys(humans).reduce((humanAges, human) => {
+          if (human === castMember) {
+            humanAges += (movie.yearReleased - humans[human].yearBorn);
+          }
+          return humanAges;
+        }, 0)/movie.cast.length;
+        return castAges;
+      }, 0);
+      if (!directorMovies[movie.director]){
+        directorMovies[movie.director] = { [movie.title]: Math.floor(ages)};
+      } else {
+        directorMovies[movie.director][movie.title] =  Math.floor(ages);
+      }
+      return directorMovies;
+    },{});
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Given 3 datasets, need to return an object, sounds like a complicated
+    // reduce to me. But where to start?
   },
 
   uncastActors() {
@@ -882,25 +952,28 @@ const dinosaurPrompts = {
       }]
     */
 
-
-    // const resultPrelim = Object.keys(humans).reduce((uncastActors, actor) => {
-    //     movies.forEach(movie => {
-    //       if (!movie.cast.includes(actor)) {
-    //         uncastActors.push({
-    //           name: actor,
-    //           nationality: humans[actor].nationality,
-    //           imdbStarMeterRating: humans[actor].imdbStarMeterRating
-    //         });
-    //       }
-    //     })
-    //     return uncastActors;
-    //   }, []).sort((a,b) => (a.nationality - b.nationality));
-
-    // result = [...new Set(resultPrelim)];
-    // return result;
-
+   let notCasted = [];
+      const result = Object.keys(humans).reduce((notInMovies, human) => {     
+        !movies.find(movie => movie.cast.includes(human)) ? notCasted.push(human) : null;
+          if (!movies.find(movie => movie.cast.includes(human))) {
+            notInMovies.push( { name: `${human}`,  imdbStarMeterRating: parseInt(`${humans[human].imdbStarMeterRating}`), nationality: `${humans[human].nationality}`});
+            }
+        return notInMovies;
+      }, []).sort(function(a, b) {
+        let nameA = a.nationality.toUpperCase(); 
+        let nameB = b.nationality.toUpperCase(); 
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+ 
+      return result;
     // Annotation:
-    // Write your annotation here as a comment
+    // Probably could use some refactoring here but time is the real enemy.
   },
 
   actorsAgesInMovies() {
